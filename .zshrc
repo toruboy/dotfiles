@@ -5,7 +5,7 @@ SAVEHIST=100000
 
 ## 補完機能の強化
 autoload -U compinit
-compinit
+compinit -u
 
 ## コアダンプサイズを制限
 limit coredumpsize 102400
@@ -93,7 +93,7 @@ alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 
 ## rbenv
 eval "$(rbenv init -)"
-source /usr/local/Cellar/rbenv/0.2.1/completions/rbenv.zsh
+source /usr/local/Cellar/rbenv/0.4.0/completions/rbenv.zsh
 
 ## prompt
 case ${UID} in
@@ -123,4 +123,17 @@ kterm*|xterm)
     }
     ;;
 esac
+
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+### JDK
+JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
+export JAVA_HOME
+export PATH=${JAVA_HOME}/bin:${PATH}
+
+### python
+PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages
+export PYTHONPATH
 
