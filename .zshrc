@@ -3,9 +3,21 @@ HISTFILE=$HOME/.zsh-history
 HISTSIZE=100000
 SAVEHIST=100000
 
+## 補完ファイルの読み込み
+fpath=(/usr/local/share/zsh-completions(N-/) $fpath)
+
 ## 補完機能の強化
-autoload -U compinit
+autoload -Uz compinit
 compinit -u
+
+## Emacsキーバインド
+bindkey -e
+
+## 単語の区切り設定
+autoload -Uz select-word-style
+select-word-style default
+zstyle ':zle:*' word-chars " /=;@:{},|"
+zstyle ':zle:*' word-style unspecified
 
 ## コアダンプサイズを制限
 limit coredumpsize 102400
@@ -15,6 +27,12 @@ unsetopt promptcr
 
 ## 色を使う
 setopt prompt_subst
+
+## ^Dでzshを終了しない
+setopt IGNORE_EOF
+
+## ^Q/^Sのフローコントロールを無効にする
+setopt NO_FLOW_CONTROL
 
 ## ビープを鳴らさない
 setopt nobeep
@@ -73,6 +91,9 @@ zstyle ':completion:*:default' menu select=1
 ## 補完候補の色づけ
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
+## 補完候補の大文字小文字を区別しない
+zstyle ':completion:*:default' matcher-list 'm:{a-z}={A-Z}'
+
 ## ディレクトリ名だけで cd
 setopt auto_cd
 
@@ -86,14 +107,17 @@ setopt auto_param_slash
 setopt correct
 
 ## alias
-alias ls="ls -G"
-alias ll="ls -lG"
+alias ls="ls -FG"
+alias ll="ls -lFG"
+alias rm="rm -i"
+alias cp="cp -i"
+alias mv="mv -i"
+alias mkdir="mkdir -p"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 alias gvim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-
-## rbenv
-eval "$(rbenv init -)"
-source /usr/local/Cellar/rbenv/0.4.0/completions/rbenv.zsh
 
 ## prompt
 case ${UID} in
@@ -124,12 +148,18 @@ kterm*|xterm)
     ;;
 esac
 
+export PATH="/usr/local/bin:$PATH"
+
+## rbenv
+eval "$(rbenv init -)"
+source /usr/local/Cellar/rbenv/0.4.0/completions/rbenv.zsh
+
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
 ### JDK
-JAVA_HOME=$(/usr/libexec/java_home -v 1.7)
+JAVA_HOME=$(/usr/libexec/java_home)
 export JAVA_HOME
 export PATH=${JAVA_HOME}/bin:${PATH}
 
